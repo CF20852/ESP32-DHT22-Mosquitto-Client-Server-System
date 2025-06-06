@@ -1,0 +1,444 @@
+{
+"annotations": {
+"list": [
+{
+"builtIn": 1,
+"datasource": {
+"type": "grafana",
+"uid": "-- Grafana --"
+},
+"enable": true,
+"hide": true,
+"iconColor": "rgba(0, 211, 255, 1)",
+"name": "Annotations & Alerts",
+"type": "dashboard"
+}
+]
+},
+"editable": true,
+"fiscalYearStartMonth": 0,
+"graphTooltip": 1,
+"id": 2,
+"links": [],
+"panels": [
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"fieldConfig": {
+"defaults": {
+"color": {
+"mode": "thresholds"
+},
+"custom": {
+"axisBorderShow": false,
+"axisCenteredZero": false,
+"axisColorMode": "text",
+"axisLabel": "",
+"axisPlacement": "auto",
+"barAlignment": 0,
+"barWidthFactor": 0.6,
+"drawStyle": "line",
+"fillOpacity": 0,
+"gradientMode": "none",
+"hideFrom": {
+"legend": false,
+"tooltip": false,
+"viz": false
+},
+"insertNulls": false,
+"lineInterpolation": "smooth",
+"lineWidth": 1,
+"pointSize": 5,
+"scaleDistribution": {
+"type": "linear"
+},
+"showPoints": "auto",
+"spanNulls": false,
+"stacking": {
+"group": "A",
+"mode": "none"
+},
+"thresholdsStyle": {
+"mode": "off"
+}
+},
+"mappings": [],
+"max": 120,
+"min": 0,
+"thresholds": {
+"mode": "absolute",
+"steps": [
+{
+"color": "blue"
+},
+{
+"color": "green",
+"value": 55
+},
+{
+"color": "orange",
+"value": 85
+}
+]
+},
+"unit": "fahrenheit"
+},
+"overrides": []
+},
+"gridPos": {
+"h": 8,
+"w": 12,
+"x": 0,
+"y": 0
+},
+"id": 1,
+"options": {
+"legend": {
+"calcs": [],
+"displayMode": "list",
+"placement": "bottom",
+"showLegend": true
+},
+"tooltip": {
+"hideZeros": false,
+"mode": "single",
+"sort": "none"
+}
+},
+"pluginVersion": "12.0.1",
+"targets": [
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"groupBy": [],
+"measurement": "enviro_data",
+"orderByTime": "ASC",
+"policy": "default",
+"refId": "A",
+"resultFormat": "time_series",
+"select": [
+[
+{
+"params": [
+"temperature"
+],
+"type": "field"
+}
+]
+],
+"tags": []
+},
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"groupBy": [],
+"hide": false,
+"measurement": "enviro_data",
+"orderByTime": "ASC",
+"policy": "default",
+"refId": "B",
+"resultFormat": "time_series",
+"select": [
+[
+{
+"params": [
+"dewpoint"
+],
+"type": "field"
+}
+]
+],
+"tags": []
+}
+],
+"title": "Temperature and Dewpoint",
+"type": "timeseries"
+},
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"fieldConfig": {
+"defaults": {
+"color": {
+"mode": "palette-classic"
+},
+"custom": {
+"axisBorderShow": false,
+"axisCenteredZero": false,
+"axisColorMode": "text",
+"axisLabel": "",
+"axisPlacement": "auto",
+"barAlignment": 0,
+"barWidthFactor": 0.6,
+"drawStyle": "line",
+"fillOpacity": 0,
+"gradientMode": "none",
+"hideFrom": {
+"legend": false,
+"tooltip": false,
+"viz": false
+},
+"insertNulls": false,
+"lineInterpolation": "linear",
+"lineWidth": 1,
+"pointSize": 5,
+"scaleDistribution": {
+"type": "linear"
+},
+"showPoints": "auto",
+"spanNulls": false,
+"stacking": {
+"group": "A",
+"mode": "none"
+},
+"thresholdsStyle": {
+"mode": "off"
+}
+},
+"mappings": [],
+"max": 50,
+"min": 0,
+"thresholds": {
+"mode": "absolute",
+"steps": [
+{
+"color": "orange"
+},
+{
+"color": "yellow",
+"value": 10
+},
+{
+"color": "green",
+"value": 20
+}
+]
+}
+},
+"overrides": []
+},
+"gridPos": {
+"h": 8,
+"w": 12,
+"x": 0,
+"y": 8
+},
+"id": 2,
+"options": {
+"legend": {
+"calcs": [],
+"displayMode": "list",
+"placement": "bottom",
+"showLegend": false
+},
+"tooltip": {
+"hideZeros": false,
+"mode": "single",
+"sort": "none"
+}
+},
+"pluginVersion": "12.0.1",
+"targets": [
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"groupBy": [],
+"hide": true,
+"measurement": "enviro_data",
+"orderByTime": "ASC",
+"policy": "default",
+"refId": "A",
+"resultFormat": "time_series",
+"select": [
+[
+{
+"params": [
+"temperature"
+],
+"type": "field"
+}
+]
+],
+"tags": []
+},
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"groupBy": [],
+"hide": true,
+"measurement": "enviro_data",
+"orderByTime": "ASC",
+"policy": "default",
+"refId": "B",
+"resultFormat": "time_series",
+"select": [
+[
+{
+"params": [
+"dewpoint"
+],
+"type": "field"
+}
+]
+],
+"tags": []
+},
+{
+"datasource": {
+"name": "Expression",
+"type": "__expr__",
+"uid": "__expr__"
+},
+"expression": "$A-$B",
+"hide": false,
+"refId": "C",
+"type": "math"
+}
+],
+"title": "Temperature-Dewpoint Spread",
+"type": "timeseries"
+},
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"fieldConfig": {
+"defaults": {
+"color": {
+"mode": "thresholds"
+},
+"custom": {
+"axisBorderShow": false,
+"axisCenteredZero": false,
+"axisColorMode": "text",
+"axisLabel": "",
+"axisPlacement": "auto",
+"barAlignment": 0,
+"barWidthFactor": 0.6,
+"drawStyle": "line",
+"fillOpacity": 0,
+"gradientMode": "none",
+"hideFrom": {
+"legend": false,
+"tooltip": false,
+"viz": false
+},
+"insertNulls": false,
+"lineInterpolation": "smooth",
+"lineWidth": 1,
+"pointSize": 5,
+"scaleDistribution": {
+"type": "linear"
+},
+"showPoints": "auto",
+"spanNulls": false,
+"stacking": {
+"group": "A",
+"mode": "none"
+},
+"thresholdsStyle": {
+"mode": "off"
+}
+},
+"mappings": [],
+"max": 100,
+"min": 0,
+"thresholds": {
+"mode": "absolute",
+"steps": [
+{
+"color": "green"
+},
+{
+"color": "#EAB839",
+"value": 35
+},
+{
+"color": "red",
+"value": 60
+}
+]
+}
+},
+"overrides": []
+},
+"gridPos": {
+"h": 8,
+"w": 12,
+"x": 0,
+"y": 16
+},
+"id": 3,
+"options": {
+"legend": {
+"calcs": [],
+"displayMode": "list",
+"placement": "bottom",
+"showLegend": true
+},
+"tooltip": {
+"hideZeros": false,
+"mode": "single",
+"sort": "none"
+}
+},
+"pluginVersion": "12.0.1",
+"targets": [
+{
+"datasource": {
+"type": "influxdb",
+"uid": "beo3ibw90ghdsc"
+},
+"groupBy": [],
+"measurement": "enviro_data",
+"orderByTime": "ASC",
+"policy": "default",
+"refId": "A",
+"resultFormat": "time_series",
+"select": [
+[
+{
+"params": [
+"humidity"
+],
+"type": "field"
+}
+]
+],
+"tags": []
+}
+],
+"title": "Relative Humidity",
+"type": "timeseries"
+}
+],
+"preload": false,
+"refresh": "1m",
+"schemaVersion": 41,
+"tags": [],
+"templating": {
+"list": []
+},
+"time": {
+"from": "now-3h",
+"to": "now"
+},
+"timepicker": {},
+"timezone": "browser",
+"title": "Temperature and Humidity",
+"uid": "b5aaf4c0-3bc4-4f43-bce4-017e96f2d4f7",
+"version": 18
+}
