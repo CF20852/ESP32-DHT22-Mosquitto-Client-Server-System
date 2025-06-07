@@ -2,7 +2,7 @@
 This README is intended to be a brief tutorial on how to get a sensor running on an ESP32 Dev Board platform or similar to transmit time series data using Mosquitto MQTT to a Raspberry Pi or other suitable Linux-based web server and plot the data using Grafana.  This repo includes the ESP32 client code written using the Arduino IDE platform and the JSON file that generates the Grafana Dashboard that plots temperature, relative humidity, and temperature-dewpoint spread.  (The latter parameter is of interest to pilots and weather guessers for predicting haze and fog.)  This tutorial assumes you have at least a basic familiarity with the Raspberry Pi OS.  It assumes you have either have a computer setup to SSH into the Pi or you have a keyboard, mouse, and monitor connected to the Pi.  You will also need to use a web browser either running on the Pi or on another computer to complete the software setup on the Pi.
 
 ## ESP32 Hardware Setup
-The hardware setup I used is an ESP32-DevKitC-32E Development Board, which I purchased from Amazon.com for about US$11.00.  The sensor I used is a HiLetgo 2pcs DHT22/AM2302 Digital Temperature And Humidity Sensor Module Temperature Humidity Monitor Sensor, which comes with cables to connect it to the ESP32 board, and which I purchased on Amazon.com for about US$14.00 for two.
+The hardware setup I used is an ESP32-DevKitC-32E Development Board, which I purchased from Amazon.com for about US$11.00.  The sensor I used is a HiLetgo 2pcs DHT22/AM2302 Digital Temperature And Humidity Sensor Module Temperature Humidity Monitor Sensor, which comes with cables to connect it to the ESP32 board, and which I purchased on Amazon.com for about US$14.00 for two.  I connected 3.3V on the ESP32 board to 3.3V on the DHT22, GND on the ESP32 board to GND on the DHT22, and pin 4 on the ESP32 board to Out (which might be called Data or something else) on the DHT22.
 ## ESP32 Dev Board software
 The software source code is contained in ESP32-DHT22_Mosquitto_Client_v0.2.ino.  The header file secrets.h contains, *inter alia*, the Wi-Fi access point SSID and password and the MQTT server's IP address.
 
@@ -54,4 +54,14 @@ To understand this command, you can refer to the `docker exec` documentation [he
 CREATE DATABASE <your_database_name>
 quit
 ```
-12.  
+12.  For the remainder of the setup, you'll use a browser to connect to NodeRED and Grafana.  NodeRED is at <your_Raspberry_Pi_IP_Address>:1880, and Grafana is at <your_Raspberry_Pi_IP_Address>:3000.  NodeRED is used to set up the data transfer from Mosquitto to InfluxDB.  Grafana is used to display the data in table, time series, bar chart, or whatever format that Grafana provides and you like.  Let's start with NodeRED.
+13.  In your browser, navigate to <your_Raspberry_Pi_IP_Address>:1880.  (That's port 1880 on your Raspberry Pi IP address.)  Let's hope there isn't a firewall between your browser and that port on the Pi.  If there is, you might have to reconfigure your firewall to let traffic through that port.  How to do that is _way_ beyond the scope of this document.
+14.  The GUI for NodeRED should now be in your browser window.  On the left-hand side, you'll see a lengthy list of "nodes," grouped under headings like "common," "function," "network," "sequence," "parser," "storage," etc.
+     - From "network," choose "mqtt in" and drag it onto the Flow grid.
+     - From "function," choose "function" and drag it onto the Flow grid to the right of the "mqtt in" node.
+     - From "storage," choose "influxdb in" (not "influxdb out") and drag it onto the Flow grid to the right of the "function" node.
+     - Connect the "mqtt in" node to the "function" node by dragging the dot on the right end of the "mqtt in" node over to the dot on the left end of the "function" node.  There should now be a line connecting those two 
+       nodes together.
+     - Connect the "function" node to the "influxdb in" node in a similar manner.
+15.  Next, we need to configure the "mqtt in" node:
+     - 
