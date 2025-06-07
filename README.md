@@ -63,5 +63,10 @@ quit
      - Connect the "mqtt in" node to the "function" node by dragging the dot on the right end of the "mqtt in" node over to the dot on the left end of the "function" node.  There should now be a line connecting those two 
        nodes together.
      - Connect the "function" node to the "influxdb in" node in a similar manner.
-15.  Next, we need to configure the "mqtt in" node:
-     - 
+15.  Next, we need to configure the "mqtt in" node.  When you double-click on the "mqtt in" node, you should see a form come up on the screen that looks like the screenshow immediately following this line.  Fill yours in similarly to the way I did mine.  You may need to change the Topic if you changed it in your ESP32 sketch.
+  
+![Screenshot 2025-06-07 151050](https://github.com/user-attachments/assets/46bdc05b-0487-43d1-b304-df7245d188b8)
+
+To the right of the "Server" box in the form above, you should see a pencil icon.  Click on it, and the following form should come up.  Fill it in the way I did mine.  Mosquitto defaults to the MQTT V3.1.1 protocol.  Once you're done filling in the form, click on the red Update button.  Then click on the red Done button on the previous form.
+
+![Screenshot 2025-06-07 151801](https://github.com/user-attachments/assets/c6e794b6-9421-409b-a0c1-d37dd98e79d2)
