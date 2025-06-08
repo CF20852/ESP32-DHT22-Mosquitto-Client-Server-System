@@ -103,7 +103,8 @@ I've included in this repo the JSON file I exported from Node-RED for this syste
      - on the "Select" line, click on the field you want to chart, _e.g._, "temperature".
 You should now see a plot of your temeperature data, like the screenshot below (click on the figure to enlarge it in a new tab):
 
-![Screenshot 2025-06-07 163704](https://github.com/user-attachments/assets/b082994a-a04d-4fb1-bcff-d60ffd5ff15c)
+![Screenshot 2025-06-07 163704](https://github.com/user-attachments/assets/f98ab658-6097-4b4e-a101-c35a708cabdc)
+
 
 21.  Now, in the Visualization panel on the right-hand side of the screen depicted above, you can configure how you want your data displayed.  I don't have any sage advice on that topic, other than explore the various settings and settle on what pleases you (or your customer).  Included in this repo is a copy of my Grafana visualization JSON code, which you could try importing if all else fails.
 
