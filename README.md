@@ -91,6 +91,7 @@ When you're done, your NodeRED flow should look like the figure below.  Note tha
 
 ![Screenshot 2025-06-07 165735](https://github.com/user-attachments/assets/e3c711df-2494-462f-838a-3b9ca8e1ddd1)
 
+I've included in this repo the JSON file I exported from NodeRED for this system.  I don't know if it will do you any good, because there are a lot of IDs that I don't understand, and they may be unique to my setup.  The file may, however, provide a useful point of comparison if you need to debug your setup.
 
 18.  Now navigate your browser to <your_Raspberry_Pi_IP_Address>:3000 to bring up Grafana.  You can login using `admin` as the username and `admin` as the password.  Then you'll be prompted to change the password.  During the initial Grafana setup, you'll have to add a data source, specifically, InfluxDB.  
 19.  To do this, you'll need to go into the InfluxDB Data source configuration page and tell InfluxDB where to get the data.  You specifiy that in the URL box of the HTTP section.  Then scroll down on the InfluxDB setup page.  Under the InfluxDB Details heading, in the Datbase box, enter the name of your database.  In my case, it's "enviro_data," which is what I called it in Step 17 above.  At this point, you'll want to have your ESP32 up and running to feed data to the Pi.  After you've done this, click on the "Save & test" button at the bottom of the page.  If everything has worked properly, a green box should appear and say something like "datasource is working.  3 measurements found" (_e.g._, temperature, humidity, and dewpoint).
