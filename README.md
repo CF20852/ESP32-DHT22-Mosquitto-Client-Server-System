@@ -1,6 +1,9 @@
 # ESP32-DHT22-Mosquitto-Client-Server-System
 This README is intended to be a brief tutorial on how to get a sensor running on an ESP32 Dev Board platform or similar to transmit time series data using Mosquitto MQTT to a Raspberry Pi or other suitable Linux-based web server and plot the data using Grafana.  This repo includes the ESP32 client code written using the Arduino IDE platform and the JSON file that generates the Grafana Dashboard that plots temperature, relative humidity, and temperature-dewpoint spread.  (The latter parameter is of interest to pilots and weather guessers for predicting haze and fog.)  This tutorial assumes you have at least a basic familiarity with the Raspberry Pi OS.  It assumes you have either have a computer set up to SSH into the Pi or you have a keyboard, mouse, and monitor connected to the Pi.  You will also need to use a web browser either running on the Pi or on another computer to complete the software setup on the Pi.
 
+## _Caveat Lector_ (Reader Beware)
+I wrote this README on 7 June 2025.  It is based on the hardware and software available during the past few days.  These instructions may need to be updated if updates in the hardware and software occur, but I do not commit myself to keeping this README up-to-date.
+
 ## ESP32 Hardware Setup
 The hardware setup I used is an ESP32-DevKitC-32E Development Board, which I purchased from Amazon.com for about US$11.00.  The sensor I used is a HiLetgo 2pcs DHT22/AM2302 Digital Temperature And Humidity Sensor Module Temperature Humidity Monitor Sensor, which comes with cables to connect it to the ESP32 board, and which I purchased on Amazon.com for about US$14.00 for two.  I connected 3.3V on the ESP32 board to 3.3V on the DHT22, GND on the ESP32 board to GND on the DHT22, and pin 4 on the ESP32 board to Out (which might be called Data or something else) on the DHT22.
 ## ESP32 Dev Board software
@@ -41,7 +44,7 @@ cd IOTstack/
 - mosquitto
 - nodered
 ```
-7.  Start the build of the docker-compose.yml fileby pressing [Enter].
+7.  Start the build of the docker-compose.yml file by pressing [Enter].
 8.  Now select `->Docker Commands<-` in the IOTStack main menu, and press [Enter] to install the Docker containers and the four programs you selected in step 6.  The Pi will download and install those four programs, which may take some time.
 9.  Once installation is complete, you can use `docker-compose ps` to see that the four programs are running.
 10.  The next step is to create a timeseries database in InfluxDB.  Because InfluxDB is running in a Docker container, you'll need to start Influx through Docker, as follow:
@@ -49,6 +52,7 @@ cd IOTstack/
 docker exec -it influxdb influx
 ```
 To understand this command, you can refer to the `docker exec` documentation [here](https://docs.docker.com/reference/cli/docker/container/exec/).
+
 11. Now you should have a command prompt from Influx.  Use the following commands to create the database, and then quit Influx:
 ```
 CREATE DATABASE <your_database_name>
@@ -63,7 +67,7 @@ quit
      - Connect the "mqtt in" node to the "function" node by dragging the dot on the right end of the "mqtt in" node over to the dot on the left end of the "function" node.  There should now be a line connecting those two 
        nodes together.
      - Connect the "function" node to the "influxdb out" node in a similar manner.
-15.  Next, we need to configure the "mqtt in" node.  When you double-click on the "mqtt in" node, you should see a form come up on the screen that looks like the screenshow immediately following this line.  Fill yours in similarly to the way I did mine.  You may need to change the Topic if you changed it in your ESP32 sketch.
+15.  Next, we need to configure the "mqtt in" node.  When you double-click on the "mqtt in" node, you should see a form come up on the screen that looks like the screenshow immediately following this paragraph.  Fill yours in similarly to the way I did mine.  You may need to change the Topic if you changed it in your ESP32 sketch.
   
 ![Screenshot 2025-06-07 151050](https://github.com/user-attachments/assets/46bdc05b-0487-43d1-b304-df7245d188b8)
 
@@ -75,7 +79,7 @@ To the right of the "Server" box in the form above, you should see a pencil icon
 
 ![Screenshot 2025-06-07 153031](https://github.com/user-attachments/assets/4cf9ae72-3d72-45fe-8369-f9bc2d9f59c9)
 
-     Once you've filled out the form, click on the red "Done" button.
+Once you've filled out the form, click on the red "Done" button.
 
 17.  The final step in the NodeRED setup is to configure the "influxdb out" node.  My form looks like this:
 
@@ -89,7 +93,7 @@ When you're done, your NodeRED flow should look like the figure below.  Note tha
 
 
 18.  Now navigate your browser to <your_Raspberry_Pi_IP_Address>:3000 to bring up Grafana.  You can login using `admin` as the username and `admin` as the password.  Then you'll be prompted to change the password.  During the initial Grafana setup, you'll have to add a data source, specifically, InfluxDB.  
-19.  To do this, you'll need to go into the InfluxDB Data source configuration page and tell InfluxDB where to get the data.  You specifiy that in the URL box of the HTTP section.  Then scroll down on the InfluxDB setup page.  Under theInfluxDB Details heading, in the Datbase box, enter the name of your database.  In my case, it's "enviro_data," which is what I called it in Step 17 above.  At this point, you'll want to have your ESP32 up and running to feed data to the Pi.  After you've done this, click on the "Save & test" button at the bottom of the page.  If everything has worked properly, a green box should appear and say something like "datasource is working.  3 measurements found" (_e.g._, temperature, humidity, and dewpoint).
+19.  To do this, you'll need to go into the InfluxDB Data source configuration page and tell InfluxDB where to get the data.  You specifiy that in the URL box of the HTTP section.  Then scroll down on the InfluxDB setup page.  Under the InfluxDB Details heading, in the Datbase box, enter the name of your database.  In my case, it's "enviro_data," which is what I called it in Step 17 above.  At this point, you'll want to have your ESP32 up and running to feed data to the Pi.  After you've done this, click on the "Save & test" button at the bottom of the page.  If everything has worked properly, a green box should appear and say something like "datasource is working.  3 measurements found" (_e.g._, temperature, humidity, and dewpoint).
 20.  Once you have your data source up and running all the way from your ESP32 through the Mosquitto broker, NodeRED, and InfluxDB to Grafana, you can proceed to building a dashboard in Grafana to display your data.  So,
      - Create a new Dashboard,
      - Click on the blue "Add visualization" button,
