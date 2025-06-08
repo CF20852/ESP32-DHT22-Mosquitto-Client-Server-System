@@ -83,6 +83,11 @@ To the right of the "Server" box in the form above, you should see a pencil icon
 
 Note that the Server must be of the v1.8-flux variety, based on the version of InfluxDB that IOTStack installed on my Pi.
 
+When you're done, your NodeRED flow should look like the figure below.  Note that I added a couple of "debug" nodes while I was trying to get this to work:
+
+![Screenshot 2025-06-07 165735](https://github.com/user-attachments/assets/e3c711df-2494-462f-838a-3b9ca8e1ddd1)
+
+
 18.  Now navigate your browser to <your_Raspberry_Pi_IP_Address>:3000 to bring up Grafana.  You can login using `admin` as the username and `admin` as the password.  Then you'll be prompted to change the password.  During the initial Grafana setup, you'll have to add a data source, specifically, InfluxDB.  
 19.  To do this, you'll need to go into the InfluxDB Data source configuration page and tell InfluxDB where to get the data.  You specifiy that in the URL box of the HTTP section.  Then scroll down on the InfluxDB setup page.  Under theInfluxDB Details heading, in the Datbase box, enter the name of your database.  In my case, it's "enviro_data," which is what I called it in Step 17 above.  At this point, you'll want to have your ESP32 up and running to feed data to the Pi.  After you've done this, click on the "Save & test" button at the bottom of the page.  If everything has worked properly, a green box should appear and say something like "datasource is working.  3 measurements found" (_e.g._, temperature, humidity, and dewpoint).
 20.  Once you have your data source up and running all the way from your ESP32 through the Mosquitto broker, NodeRED, and InfluxDB to Grafana, you can proceed to building a dashboard in Grafana to display your data.  So,
@@ -98,7 +103,7 @@ You should now see a plot of your temeperature data, like the screenshot below (
 21.  Now, in the Visualization panel on the right-hand side of the screen depicted above, you can configure how you want your data displayed.  I don't have any sage advice on that topic, other than explore the various settings and settle on what pleases you (or your customer).
 
 ### Troubleshooting
-If your data are getting lost somewhere between your ESP32 and Grafana, the first step is to find out how far your data goes before it falls into a bit bucket somewhere.  Mr. Harmon's website referenced above has some useful hints.  One thing I found useful when I was struggling to get this working last night is to use "dewbug" nodes in NodeRED.  They're in the "common" section of nodes on the left-hand side of the NodeRED screen.  You can connect them to the outputs of the MQTT node and the function node and see what data are flowing through NodeRED using the NodeRED debug panel, which you have to bring up, because it isn't there by default.  To bring up the debug panel, click on the Debug messages button (bug icon) in the upper right corner of the NodeRED screen, or press '<CTRL>-g', followed by 'd'.
+If your data are getting lost somewhere between your ESP32 and Grafana, the first step is to find out how far your data goes before it falls into a bit bucket somewhere.  Mr. Harmon's website referenced above has some useful hints.  One thing I found useful when I was struggling to get this working last night is to use "debug" nodes in NodeRED.  They're in the "common" section of nodes on the left-hand side of the NodeRED screen.  You can connect them to the outputs of the MQTT node and the function node and see what data are flowing through NodeRED using the NodeRED debug panel, which you have to bring up, because it isn't there by default.  To bring up the debug panel, click on the Debug messages button (bug icon) in the upper right corner of the NodeRED screen, or press '<CTRL>-g', followed by 'd'.
 
 Mr. Harmon suggests that to check to see if data is being written into your InfluxDB database, you can use the following commands in a Raspberry Pi terminal window:
 ```
