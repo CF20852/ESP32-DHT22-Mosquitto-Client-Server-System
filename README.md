@@ -119,3 +119,14 @@ show measurements
 select * from sensor_data
 quit
 ```
+### Cloning with Changes
+I decided I wanted another temperature and humidity monitoring system in my garage.  I was able to quickly clone the hangar system using the following steps:
+1.  Change "hangar" in the ESP32 sketch to "garage" in six places.  Flash a new ESP32 with a DHT22 attached.
+2.  Export Flow 1 in Node-RED to the clipboard.  Create a new flow, and paste the flow exported from Flow 1 into it.  Rename Flow 1 as Hangar Flow and Flow 2 as Garage Flow.
+3.  In Garage Flow, edit the MQTT node to replace "hangar" with "garage".
+4.  In Garage Flow, edit the influxdb out node to replace "enviro" with "garage".
+5.  Create a new database called "garage_data" in InfluxDB, see Steps 10 and 11 above.
+6.  In Grafana, create a new data source.  I called it "influxdb-garage".
+7.  In Grafana, make a copy of the hangar dashboard, and rename it "Garage Temperature and Humidity".  In each panel, edit the data source to be "influxdb-garage," and in each query, change "enviro_data" to "garage_data".
+
+That's all it took.  Took me less than half an hour.
