@@ -100,7 +100,7 @@ You should now see a plot of your temeperature data, like the screenshot below (
 
 ![Screenshot 2025-06-07 163704](https://github.com/user-attachments/assets/b082994a-a04d-4fb1-bcff-d60ffd5ff15c)
 
-21.  Now, in the Visualization panel on the right-hand side of the screen depicted above, you can configure how you want your data displayed.  I don't have any sage advice on that topic, other than explore the various settings and settle on what pleases you (or your customer).
+21.  Now, in the Visualization panel on the right-hand side of the screen depicted above, you can configure how you want your data displayed.  I don't have any sage advice on that topic, other than explore the various settings and settle on what pleases you (or your customer).  Included in this repo is a copy of my Grafana visualization JSON code, which you could try importing if all else fails.
 
 ### Troubleshooting
 If your data are getting lost somewhere between your ESP32 and Grafana, the first step is to find out how far your data goes before it falls into a bit bucket somewhere.  Mr. Harmon's website referenced above has some useful hints.  One thing I found useful when I was struggling to get this working last night is to use "debug" nodes in NodeRED.  They're in the "common" section of nodes on the left-hand side of the NodeRED screen.  You can connect them to the outputs of the MQTT node and the function node and see what data are flowing through NodeRED using the NodeRED debug panel, which you have to bring up, because it isn't there by default.  To bring up the debug panel, click on the Debug messages button (bug icon) in the upper right corner of the NodeRED screen, or press '<CTRL>-g', followed by 'd'.
