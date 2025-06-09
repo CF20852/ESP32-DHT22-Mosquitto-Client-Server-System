@@ -6,8 +6,11 @@ I wrote this README on 7 June 2025.  It is based on the hardware and software av
 
 ## ESP32 Hardware Setup
 The hardware setup I used is an ESP32-DevKitC-32E Development Board, which I purchased from Amazon.com for about US$11.00.  The sensor I used is a HiLetgo 2pcs DHT22/AM2302 Digital Temperature And Humidity Sensor Module Temperature Humidity Monitor Sensor, which comes with cables to connect it to the ESP32 board, and which I purchased on Amazon.com for about US$14.00 for two.  I connected 3.3V on the ESP32 board to 3.3V on the DHT22, GND on the ESP32 board to GND on the DHT22, and pin 4 on the ESP32 board to Out (which might be called Data or something else) on the DHT22.
+
+You can also use this with a BME280 or similar sensor.  Connect [ESP32 pin] - [BME280 pin] as follows:  3.3V to 3.3V, GND to GND, GPIO21/I2C SDA to SDA, and GPIO22/I2C SCL to SCL.
+
 ## ESP32 Dev Board software
-The software source code is contained in ESP32-DHT22_Mosquitto_Client_v0.2.ino.  The header file secrets.h contains, *inter alia*, the Wi-Fi access point SSID and password and the MQTT server's IP address.
+The software source code for the DHT22 version is contained in ESP32-DHT22_Mosquitto_Client_v0.2.ino.  The software source code for the BME280 version is contained in ESP32-BME280_Mosquitto_Client_v0.2.ino.  The header file secrets.h contains, *inter alia*, the Wi-Fi access point SSID and password and the MQTT server's IP address.
 
 Comments in the code should help make it readable by experienced Arduino IDE users.  Consequently, I won't elaborate on the code in detail here.
 
