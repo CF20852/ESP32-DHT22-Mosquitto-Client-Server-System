@@ -196,6 +196,10 @@ ls -la /mnt/ssd/
 ```
 sudo blkid /dev/nvme0n1p1
 ```
+You should see something like:
+```
+/dev/nvme0n1p1: LABEL="Transcend_128GB" UUID="86de2fd8-0e72-4f41-aa7a-3f2bd68bd273" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="c10adaeb-01"
+```
 6.  Use your favorite editor to add this line to /etc/fstab:
 ```
 UUID=your-actual-uuid-here /mnt/ssd ext4 defaults,nofail 0 2
@@ -209,7 +213,7 @@ docker-compose down
 ```
 2.  Verify Current Data Location
 ```
-ls -la ~/IOTstack/volumes/influxdb/data/
+ls -la /home/pi/IOTstack/volumes/influxdb/data/
 ```
 You should see the InfluxDB files and directories here.
 
@@ -220,8 +224,8 @@ sudo mkdir -p /mnt/ssd/influxdb/data
 sudo mkdir -p /mnt/ssd/influxdb/backup
 
 # Copy the data (this is the correct path from your compose file)
-sudo cp -r ~/IOTstack/volumes/influxdb/data/* /mnt/ssd/influxdb/data/
-sudo cp -r ~/IOTstack/backups/influxdb/db/* /mnt/ssd/influxdb/backup/ 2>/dev/null || echo "No backup files to copy"
+sudo cp -r /home/pi/IOTstack/volumes/influxdb/data/* /mnt/ssd/influxdb/data/
+sudo cp -r /home/pi/IOTstack/backups/influxdb/db/* /mnt/ssd/influxdb/backup/ 2>/dev/null || echo "No backup files to copy"
 ```
 4.  Set Permissions
 ```
@@ -229,7 +233,7 @@ sudo cp -r ~/IOTstack/backups/influxdb/db/* /mnt/ssd/influxdb/backup/ 2>/dev/nul
 sudo chown -R 999:999 /mnt/ssd/influxdb/
 ```
 5.  Update docker-compose.yml
-Edit your ~/IOTstack/docker-compose.yml and change the InfluxDB volumes section:
+Edit your /home/pi/IOTstack/docker-compose.yml and change the InfluxDB volumes section:
 ```
 volumes:
 - /mnt/ssd/influxdb/data:/var/lib/influxdb
@@ -249,10 +253,10 @@ docker logs influxdb
 docker exec influxdb influx -execute 'SHOW DATABASES'
 ```
 8.  Finally, check to make sure your data is getting from your sensor device(s) to Grafana.
+   
 9.  OPTIONALLY... you can remove the InfluxDB database files from your SD card, after you make sure everything is working properly with the files on the SSD:
 ```
 # Remove old InfluxDB data (be very careful with this!)
 # Only do this after confirming everything works
 sudo rm -rf /home/pi/IOTstack/volumes/influxdb/data/*
-
 ```
