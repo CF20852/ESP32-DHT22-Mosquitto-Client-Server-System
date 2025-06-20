@@ -142,6 +142,66 @@ Alternatively, you can move the database files onto a solid-state drive (SSD).  
 The following procedure was developed in a conversation between the author and Claude.AI, in which the AI suggested steps and I gave it feedback on what didn't work as it expected.  During this conversation, I shared my /home/pi/IOTstack/docker-compose.yml file with it.  This file contains the environment variables set up during the IOTstack installation process, and was key to figuring out where the InfluxDB database files were stored.  My setup uses bind mounts (./volumes/influxdb/data) rather than named Docker volumes, so the data is directly in my IOTstack directory structure.
 
 Here's the procedure:
+#### Installing and Setting Up the SSD
+If you have already installed your SSD, you can proceed to the next section, but you might want to review this section first.
+
+1.  If you have just installed a blank, unformatted SSD, first check to see if the Raspberry Pi OS recognizes it, and find out what it's name is:
+```
+sudo lsblk
+```
+You should see something like this:
+```
+mmcblk0     179:0    0  14.8G  0 disk
+├─mmcblk0p1 179:1    0   512M  0 part /boot/firmware
+└─mmcblk0p2 179:2    0  14.3G  0 part /
+nvme0n1     259:0    0 119.2G  0 disk
+```
+In my case, the SSD is /dev/nvme0n1.  The 16 GB SD card is /dev/mmcblk0, and has two partitions, p1 and p2.
+
+2.  Create a partition table for the SSD:
+```
+# Create a partition table (this will erase everything!)
+sudo fdisk /dev/nvme0n1
+```
+In fdisk:
+
+Press n for new partition
+
+Press p for primary
+
+Press 1 for partition number
+
+Press Enter twice to use default start/end
+
+Press w to write and exit
+
+3.  Create a filesystem on the SSD, preferably using the ext4 format:
+```
+# Format as ext4
+sudo mkfs.ext4 /dev/nvme0n1p1
+
+# Add a label (optional but helpful)
+sudo e2label /dev/nvme0n1p1 "InfluxDB-SSD"
+```
+4.  Mount a partition
+```
+# Mount the first partition (note the p1)
+sudo mount /dev/nvme0n1p1 /mnt/ssd
+
+# Verify it worked
+df -h | grep ssd
+ls -la /mnt/ssd/
+```
+5.  Get UUID for fstab
+```
+sudo blkid /dev/nvme0n1p1
+```
+6.  Use your favorite editor to add this line to /etc/fstab:
+```
+UUID=your-actual-uuid-here /mnt/ssd ext4 defaults,nofail 0 2
+```
+
+#### Moving the InfluxDB Database Files to the SSD
 1.  Stop IOTstack
 ```
 cd /home/pi/IOTstack
@@ -189,3 +249,10 @@ docker logs influxdb
 docker exec influxdb influx -execute 'SHOW DATABASES'
 ```
 8.  Finally, check to make sure your data is getting from your sensor device(s) to Grafana.
+9.  OPTIONALLY... you can remove the InfluxDB database files from your SD card, after you make sure everything is working properly with the files on the SSD:
+```
+# Remove old InfluxDB data (be very careful with this!)
+# Only do this after confirming everything works
+sudo rm -rf /home/pi/IOTstack/volumes/influxdb/data/*
+
+```
