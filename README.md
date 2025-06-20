@@ -132,4 +132,60 @@ I decided I wanted another temperature and humidity monitoring system in my gara
 6.  In Grafana, create a new data source.  I called it "influxdb-garage".
 7.  In Grafana, make a copy of the hangar dashboard, and rename it "Garage Temperature and Humidity".  In each panel, edit the data source to be "influxdb-garage," and in each query, change "enviro_data" to "garage_data".
 
-That's all it took.  Took me less than half an hour.
+That's all it took.  Took me less than half an hour
+
+### Moving the InfluxDB Database Files to a SSD
+You might start this project storing the database files on the Raspberry Pi microSD card, and then become concerned about wearing out the microSD card prematurely due to the number of writes to the database.  Modern SD cards use wear-leveling algorithms to spread writes evenly across the memory, which helps extend their usable life.  But there are several grades of SD cards with different write cycle endurance levels.  If you must leave your database on the SD card, consider a high-endurance SD card such as one designed for a dashcam, where the video gets recorded over many times.  And you can use a card with higher capacity (_e.g._, 64 GB even if you only need 8 GB for the Raspberry Pi OS and the IOTstack programs) to spread the writes out over a larger address space.  Remember that even if your data only occupies one byte, an entire sector, _e.g._, 512 bytes, will be written to the card or drive at each update.
+
+Alternatively, you can move the database files onto a solid-state drive (SSD).  The SSD I chose has a capacity of 128 GB and a life expectancy of 50 terabytes written.  Even if I update two sector's worth of data twice a second, the drive should last over 773 years, which is probably longer than it will take the plastic parts of the Pi and its case to turn to dust.
+
+The following procedure was developed in a conversation between the author and Claude.AI, in which the AI suggested steps and I gave it feedback on what didn't work as it expected.  During this conversation, I shared my /home/pi/IOTstack/docker-compose.yml file with it.  This file contains the environment variables set up during the IOTstack installation process, and was key to figuring out where the InfluxDB database files were stored.  My setup uses bind mounts (./volumes/influxdb/data) rather than named Docker volumes, so the data is directly in my IOTstack directory structure.
+
+Here's the procedure:
+1.  Stop IOTstack
+```
+cd /home/pi/IOTstack
+docker-compose down
+```
+2.  Verify Current Data Location
+```
+ls -la ~/IOTstack/volumes/influxdb/data/
+```
+You should see the InfluxDB files and directories here.
+
+3.  Copy Data to SSD
+```
+# Make sure SSD is mounted and directory exists
+sudo mkdir -p /mnt/ssd/influxdb/data
+sudo mkdir -p /mnt/ssd/influxdb/backup
+
+# Copy the data (this is the correct path from your compose file)
+sudo cp -r ~/IOTstack/volumes/influxdb/data/* /mnt/ssd/influxdb/data/
+sudo cp -r ~/IOTstack/backups/influxdb/db/* /mnt/ssd/influxdb/backup/ 2>/dev/null || echo "No backup files to copy"
+```
+4.  Set Permissions
+```
+# InfluxDB runs as user influxdb (usually UID 999)
+sudo chown -R 999:999 /mnt/ssd/influxdb/
+```
+5.  Update docker-compose.yml
+Edit your ~/IOTstack/docker-compose.yml and change the InfluxDB volumes section:
+```
+volumes:
+- /mnt/ssd/influxdb/data:/var/lib/influxdb
+- /mnt/ssd/influxdb/backup:/var/lib/influxdb/backup
+```
+6.  Start IOTstack
+```
+cd /home/pi/IOTstack
+docker-compose up -d
+```
+7.  Verify
+```
+# Check if InfluxDB started correctly
+docker logs influxdb
+
+# Check if data is accessible
+docker exec influxdb influx -execute 'SHOW DATABASES'
+```
+8.  Finally, check to make sure your data is getting from your sensor device(s) to Grafana.
